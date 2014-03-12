@@ -1,0 +1,50 @@
+# ToeTag
+
+Utilities for catching and handling exceptions.
+
+## Installation
+
+Add this line to your application's Gemfile:
+
+    gem 'toe_tag'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install toe_tag
+
+## Usage
+
+    require 'toe_tag'
+
+    # Exception grouping...
+    # Note that not all of the constants have to be defined. Missing ones will be ignored.
+    DatabaseError = ToeTag.category %w[ActiveRecord::JDBCError PG::Error ActiveRecord::StatementInvalid]
+
+    begin
+      leaky_database_call
+    rescue DatabaseError => err
+      # err could be any of the listed classes
+    end
+
+    # Filtering by message...
+    SpuriousError = DatabaseError.with_message(/spurious|pointless|meaningless/)
+
+    begin
+      boring_database_call # ! raises PG::Error, "something spurious happened"
+    rescue SpuriousError
+      log "something spurious happened, ignore it"
+    rescue DatabaseError
+      log "watch out, something bad happened"
+    end
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
