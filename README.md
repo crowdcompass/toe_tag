@@ -1,26 +1,15 @@
-# ToeTag
+# `toe_tag`
 
-Utilities for catching and handling exceptions.
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'toe_tag'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install toe_tag
+Ruby's default exception handling is strictly based on module and class inheritance. `toe_tag` provides
+additional utilities for creating your own exception groups, narrowing exceptions based on message, and
+executing arbitrary blocks to determine whether an exception should be caught -- all within the familiar
+rescue syntax.
 
 ## Usage
 
     require 'toe_tag'
 
-    # Exception grouping...
+    # Exception grouping.
     # Note that not all of the constants have to be defined. Missing ones will be ignored.
     DatabaseError = ToeTag.category %w[ActiveRecord::JDBCError PG::Error ActiveRecord::StatementInvalid]
 
@@ -41,10 +30,24 @@ Or install it yourself as:
       log "watch out, something bad happened"
     end
 
+## Installation
+
+Add this line to your application's Gemfile:
+
+    gem 'toe_tag'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install toe_tag
+
 ## Contributing
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+1. Fork it.
+2. Create your feature branch (`git checkout -b my-new-feature`).
+3. Commit your changes (`git commit -am 'Add some feature'`).
+4. Push to the branch (`git push origin my-new-feature`).
+5. Submit a pull request.

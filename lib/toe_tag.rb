@@ -35,6 +35,14 @@ module ToeTag
   #   ErrorA = Class.new(StandardError)
   #   ErrorB = Class.new(StandardError)
   #   ErrorC = Class.new(StandardError)
+  #   
+  #   ErrorsABC = ToeTag.category ErrorA, ErrorB, ErrorC
+  #
+  #   begin
+  #     # some stuff
+  #   rescue ErrorsABC => err
+  #     # err is either ErrorA, ErrorB, or ErrorC
+  #   end
   #
   class CategorySpec < ExceptionSpec
     attr_reader :exceptions
@@ -75,6 +83,27 @@ module ToeTag
     CategorySpec.category(*names)
   end
 
+  # Wraps a proc to allow arbitrary logic when matching an exception.
+  class ProcSpec < ExceptionSpec
+
+    def initialize(blk, exception = StandardError)
+      self.exception = exception
+      self.block = blk
+    end
+
+    def ===(except)
+      exception === except && block[except]
+    end
+
+    private
+
+    attr_accessor :exception, :block
+  end
+
+  def self.with_proc(&blk)
+    ProcSpec.new(&blk)
+  end
+
   # Wraps an exception class to allow matching against the message, too. Intended
   # to be used in rescue clauses, for cases where one exception class 
   # (ActiveRecord::StatementInvalid, I'm looking at you) represents a host of 
@@ -84,7 +113,7 @@ module ToeTag
   # of meta-exception. This may be useful in combination with ExceptionCategory.
   #
   # @example
-  #   BogusError = ExceptionMessageCatcher.new(/bogus/)
+  #   BogusError = StandardError.with_message(/bogus/)
   #
   #   begin
   #     raise "bogus error man"

@@ -46,6 +46,26 @@ describe ToeTag do
 
   end
 
+  describe ToeTag::ProcSpec do
+    
+    it "should capture exceptions that return true from a given proc" do
+      catcher = ToeTag::ProcSpec.new(->(e){ e.message == "not spurious" })
+      -> {
+        begin
+          raise error_a, "not spurious"
+        rescue catcher
+        end
+      }.should_not raise_error
+      -> {
+        begin
+          raise error_a, "totally spurious"
+        rescue catcher
+        end
+      }.should raise_error(error_a)
+    end
+
+  end
+
   describe ToeTag::MessageSpec do
     
     it "should capture exceptions with a given message substring" do
@@ -111,6 +131,7 @@ describe ToeTag do
       end
 
     end
+
   end
 
 end
