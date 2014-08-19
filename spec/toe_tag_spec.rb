@@ -12,7 +12,7 @@ describe ToeTag do
   describe ToeTag::CategorySpec do
 
     it "should capture exceptions from any class it is composed from" do
-      -> {
+      expect {
         begin 
           raise error_a
         rescue error_group
@@ -25,21 +25,21 @@ describe ToeTag do
           raise error_c
         rescue error_group
         end
-      }.should_not raise_error
-      -> {
+      }.not_to raise_error
+      expect {
         begin
           raise error_oddball
         rescue error_group
         end
-      }.should raise_error(error_oddball)
+      }.to raise_error(error_oddball)
     end
 
     context ".category" do
 
       it "should look up exception types by name, skipping nonexistent ones" do
         grouping = ToeTag.category %w[NameError KeyError BogusError]
-        grouping.exceptions.should have(2).entries
-        (grouping === NameError.new).should be_true
+        expect(grouping.exceptions.length).to eql 2
+        expect(grouping === NameError.new).to eql true
       end
 
     end
@@ -50,18 +50,18 @@ describe ToeTag do
     
     it "should capture exceptions that return true from a given proc" do
       catcher = ToeTag::ProcSpec.new(->(e){ e.message == "not spurious" })
-      -> {
+      expect {
         begin
           raise error_a, "not spurious"
         rescue catcher
         end
-      }.should_not raise_error
-      -> {
+      }.not_to raise_error
+      expect {
         begin
           raise error_a, "totally spurious"
         rescue catcher
         end
-      }.should raise_error(error_a)
+      }.to raise_error(error_a)
     end
 
   end
@@ -70,42 +70,42 @@ describe ToeTag do
     
     it "should capture exceptions with a given message substring" do
       catcher = ToeTag::MessageSpec.new("spurious")
-      -> {
+      expect {
         begin
           raise error_a, "a spurious error"
-         rescue catcher
-         end
-      }.should_not raise_error
-      -> {
+        rescue catcher
+        end
+      }.not_to raise_error
+      expect {
         begin
           raise error_a, "a serious error"
         rescue catcher
         end
-      }.should raise_error
+      }.to raise_error
     end
 
     context "combined with ExceptionCategory" do
       
       it "should capture exceptions within a set with a given message substring" do
         catcher = ToeTag.category(error_group).with_message("spurious")
-        -> {
+        expect {
           begin
             raise error_a, "a spurious error"
           rescue catcher
           end
-        }.should_not raise_error
-        -> {
+        }.not_to raise_error
+        expect {
           begin
             raise error_oddball, "a spurious error, outside the group"
           rescue catcher
           end
-        }.should raise_error(error_oddball)
-        -> {
+        }.to raise_error(error_oddball)
+        expect {
           begin
             raise error_b, "a serious error"
           rescue catcher
           end
-        }.should raise_error(error_b)
+        }.to raise_error(error_b)
       end
 
     end
@@ -114,20 +114,18 @@ describe ToeTag do
 
       it "should catch errors by message" do
         catcher = StandardError.with_message(/catch|retrieve|fetch/)
-
-        -> {
+        expect {
           begin
             raise "catch me if you can"
           rescue catcher
           end
-        }.should_not raise_error
-
-        -> {
+        }.not_to raise_error
+        expect {
           begin
             raise "fail"
           rescue catcher
           end
-        }.should raise_error(StandardError)
+        }.to raise_error(StandardError)
       end
 
     end
