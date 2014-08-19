@@ -9,7 +9,7 @@ rescue syntax.
 
     require 'toe_tag'
 
-    # Exception grouping.
+    # Exception grouping:
     # Note that not all of the constants have to be defined. Missing ones will be ignored.
     DatabaseError = ToeTag.category %w[ActiveRecord::JDBCError PG::Error ActiveRecord::StatementInvalid]
 
@@ -19,7 +19,7 @@ rescue syntax.
       # err could be any of the listed classes
     end
 
-    # Filtering by message...
+    # Filtering by message:
     SpuriousError = DatabaseError.with_message(/spurious|pointless|meaningless/)
 
     begin
@@ -28,6 +28,27 @@ rescue syntax.
       log "something spurious happened, ignore it"
     rescue DatabaseError
       log "watch out, something bad happened"
+    end
+
+    # Filtering by proc
+    class FancyError
+      attr_reader :error_code
+
+      def initialize(message, error_code)
+        super message
+        @error_code = error_code
+      end
+    end
+
+    FancierError = FancyError.with_proc{|e| e.error_code = 123 }
+
+    begin
+      fancy_api_call
+    rescue FancierError
+      log "it's one of those 123 errors again"
+    rescue FancyError
+      log "some unknown error, reraising"
+      raise
     end
 
 ## Installation
