@@ -43,7 +43,7 @@ rescue syntax.
       end
     end
 
-    FancierError = FancyError.with_proc{|e| e.error_code = 123 }
+    FancierError = FancyError.with_proc{|e| e.error_code == 123 }
 
     begin
       fancy_api_call
