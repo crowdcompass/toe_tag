@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/crowdcompass/toe_tag.svg?branch=master)](https://travis-ci.org/crowdcompass/toe_tag)
 [![Gem Version](https://badge.fury.io/rb/toe_tag.svg)](http://badge.fury.io/rb/toe_tag)
+[![Code Climate](https://codeclimate.com/github/crowdcompass/toe_tag/badges/gpa.svg)](https://codeclimate.com/github/crowdcompass/toe_tag)
 
 # `toe_tag`
 
