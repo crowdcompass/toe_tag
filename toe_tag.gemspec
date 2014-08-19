@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["matt@crowdcompass.com"]
   spec.description   = %q{Utilities for catching and handling exceptions.}
   spec.summary       = %q{Utilities for catching and handling exceptions.}
-  spec.homepage      = "https://github.com/crowdcompass/toetag"
+  spec.homepage      = "https://github.com/crowdcompass/toe_tag"
   spec.license       = "Apache-2.0"
 
   spec.files         = `git ls-files`.split($/)
