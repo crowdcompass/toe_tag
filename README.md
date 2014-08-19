@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/crowdcompass/toe_tag.svg?branch=master)](https://travis-ci.org/crowdcompass/toe_tag)
+
 # `toe_tag`
 
 Ruby's default exception handling is strictly based on module and class inheritance. `toe_tag` provides

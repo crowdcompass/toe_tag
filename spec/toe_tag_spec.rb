@@ -37,7 +37,7 @@ describe ToeTag do
     context ".category" do
 
       it "should look up exception types by name, skipping nonexistent ones" do
-        grouping = ToeTag.category %w[NameError KeyError BogusError]
+        grouping = ToeTag.category %w[IndexError StandardError BogusError]
         expect(grouping.exceptions.length).to eql 2
         expect(grouping === NameError.new).to eql true
       end
@@ -49,7 +49,7 @@ describe ToeTag do
   describe ToeTag::ProcSpec do
     
     it "should capture exceptions that return true from a given proc" do
-      catcher = ToeTag::ProcSpec.new(->(e){ e.message == "not spurious" })
+      catcher = ToeTag::ProcSpec.new(lambda{|e| e.message == "not spurious" })
       expect {
         begin
           raise error_a, "not spurious"
